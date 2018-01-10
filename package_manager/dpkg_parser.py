@@ -17,6 +17,7 @@ import gzip
 import urllib2
 import json
 import os
+import requests
 
 
 from package_manager.parse_metadata import parse_package_metadata
@@ -167,9 +168,9 @@ SHA256: 52ec3ac93cf8ba038fbcefe1e78f26ca1d59356cdc95e60f987c3f52b3f5e7ef
             arch
         )
 
-    buf = urllib2.urlopen(url)
+    r = requests.get(url) 
     with open("Packages.gz", 'w') as f:
-        f.write(buf.read())
+        f.write(r.content)
     actual_sha256 = util.sha256_checksum("Packages.gz")
     if sha256 != actual_sha256:
         raise Exception("sha256 of Packages.gz don't match: Expected: %s, Actual:%s" %(sha256, actual_sha256))
